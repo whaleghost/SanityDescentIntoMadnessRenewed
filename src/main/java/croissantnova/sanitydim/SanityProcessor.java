@@ -80,7 +80,7 @@ public final class SanityProcessor
         ItemStack headItem = player.getItemBySlot(EquipmentSlot.HEAD);
         if (headItem.is(ItemRegistry.GARLAND.get()))
         {
-            passive -= ConfigProxy.getGarland(dim) * ConfigProxy.getPosMul(dim) / 100f;
+            passive += ConfigProxy.getGarland(dim) * ConfigProxy.getPosMul(dim) * 50;
             if (garlandTimer <= 0)
                 headItem.hurtAndBreak(player.isInWaterOrRain() ? 2 : 1, (ServerLevel) player.level(), player, ent -> {});
         }
