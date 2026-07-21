@@ -1,0 +1,33 @@
+{
+  "minVersion": "0.8.5",
+  "compatibilityLevel": "JAVA_21",
+  "package": "croissantnova.sanitydim.mixin",
+  "refmap": "sanitydim.refmap.json",
+  "mixins": [
+    "MixinAnimal",
+    "MixinChicken",
+    "MixinCow",
+    "MixinEnderMan",
+    "MixinEntity",
+    "MixinFlowerPotBlock",
+    "MixinJukeboxBlockEntity",
+    "MixinPig",
+    "MixinServerPlayerGameMode",
+    "MixinShearsItem",
+    "MixinSheep",
+    "MixinTemptGoal",
+    "MixinThrownEgg",
+    "MixinVillager",
+    "MixinZombifiedPiglin"
+  ],
+  "client": [
+    "MixinChickenRenderer",
+    "MixinClientLevel",
+    "MixinCowRenderer",
+    "MixinGameRenderer",
+    "MixinPigRenderer",
+    "MixinSheepFurLayer",
+    "MixinSheepRenderer"
+  ],
+  "server": []
+}
