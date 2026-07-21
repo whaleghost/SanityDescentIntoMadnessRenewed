@@ -117,4 +117,9 @@ public class SanityMod
     {
         return m_inst;
     }
+
+    public static ResourceLocation id(String path)
+    {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
 }

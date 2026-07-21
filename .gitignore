@@ -39,3 +39,4 @@ run/
 repo/
 !**/src/**/repo/
 /setup-copilot.ps1
+/src/generated/
