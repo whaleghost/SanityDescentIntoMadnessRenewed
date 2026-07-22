@@ -1,7 +1,7 @@
 {
-	"itemGroup.sanitydim": "理智：疯狂坠落·重制版",
-	"entity.sanitydim.rotting_stalker": "腐烂尾随者",
-	"entity.sanitydim.sneaking_terror": "潜行惧影",
+	"itemGroup.sanitydimr": "理智：疯狂坠落·重制版",
+	"entity.sanitydimr.rotting_stalker": "腐烂尾随者",
+	"entity.sanitydimr.sneaking_terror": "潜行惧影",
 
 	"commands.sanity.set.success": "已将 %s 的理智值设为 %s",
 	"commands.sanity.add.success": "已为 %s 增加 %s 点理智",
@@ -29,7 +29,7 @@
 	"gui.sanitydim.hint17": "太吵了太吵了太吵了",
 	"gui.sanitydim.hint18": "那些声音……我受不了……",
 
-	"item.sanitydim.tooltip.press_shift": "§7按下 §9SHIFT§7 查看更多信息",
-	"item.sanitydim.garland": "花环",
-	"item.sanitydim.garland.tooltip": "§7帮助安抚神经的头饰\n\n缓慢恢复理智，并使你略微更能抵抗精神压力"
+	"item.sanitydimr.tooltip.press_shift": "§7按下 §9SHIFT§7 查看更多信息",
+	"item.sanitydimr.garland": "花环",
+	"item.sanitydimr.garland.tooltip": "§7帮助安抚神经的头饰\n\n缓慢恢复理智，并使你略微更能抵抗精神压力"
 }

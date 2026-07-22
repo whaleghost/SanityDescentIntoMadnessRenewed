@@ -19,7 +19,7 @@ public class ItemRegistry
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> SANITY_TAB = CREATIVE_TABS.register("sanity_tab",
             () -> CreativeModeTab.builder()
-                    .title(Component.translatable("itemGroup.sanitydim"))
+                    .title(Component.translatable("itemGroup.sanitydimr"))
                     .icon(() -> new ItemStack(GARLAND.get()))
                     .displayItems((params, output) -> {
                         output.accept(GARLAND.get());

@@ -2,7 +2,7 @@
   "minVersion": "0.8.5",
   "compatibilityLevel": "JAVA_21",
   "package": "whaleghost.sanitydimr.mixin",
-  "refmap": "sanitydim.refmap.json",
+  "refmap": "sanitydimr.refmap.json",
   "mixins": [
     "MixinAnimal",
     "MixinChicken",
