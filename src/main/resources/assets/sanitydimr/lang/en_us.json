@@ -1,0 +1,35 @@
+{
+	"itemGroup.sanitydimr": "Sanity: Descent Into Madness Renewed",
+	"entity.sanitydimr.rotting_stalker": "Rotting Stalker",
+	"entity.sanitydimr.sneaking_terror": "Sneaking Terror",
+	
+	"commands.sanity.set.success": "Set %s's sanity to %s",
+	"commands.sanity.add.success": "Added %s sanity to %s",
+	"commands.sanity.config.reload": "Reloaded dimension configs successfully",
+	
+	"gui.sanitydimr.hint00": "What are these sounds?",
+	"gui.sanitydimr.hint01": "I'm feeling a bit uneasy",
+	"gui.sanitydimr.hint02": "What was that?",
+	"gui.sanitydimr.hint03": "What a strange feeling...",
+	"gui.sanitydimr.hint04": "I don't like this...",
+	"gui.sanitydimr.hint05": "Huh?",
+	"gui.sanitydimr.hint06": "Hmm?",
+	"gui.sanitydimr.hint07": "What?",
+	"gui.sanitydimr.hint08": "What's there?",
+	"gui.sanitydimr.hint09": "Was that me?",
+	"gui.sanitydimr.hint010": "Weird...",
+	"gui.sanitydimr.hint011": "Did I just see something?",
+	"gui.sanitydimr.hint10": "SOMEONE'S BEHIND ME",
+	"gui.sanitydimr.hint11": "One, two, three, four...",
+	"gui.sanitydimr.hint12": "...five, six, seven, eight...",
+	"gui.sanitydimr.hint13": "THEY ARE IN MY HEAD",
+	"gui.sanitydimr.hint14": "LEAVE ME ALONE",
+	"gui.sanitydimr.hint15": "DON'T SPACE OUT",
+	"gui.sanitydimr.hint16": "WHY WON'T THEY GO AWAY?!",
+	"gui.sanitydimr.hint17": "TOO LOUD TOO LOUD TOO LOUD",
+	"gui.sanitydimr.hint18": "THE VOICES... I CAN'T...",
+
+	"item.sanitydimr.tooltip.press_shift": "§7Press §9SHIFT§7 for more information",
+	"item.sanitydimr.garland": "Garland",
+	"item.sanitydimr.garland.tooltip": "§7Something to help soothe the nerves\n\nSlowly restores your sanity and makes you slightly more resistant to stress"
+}

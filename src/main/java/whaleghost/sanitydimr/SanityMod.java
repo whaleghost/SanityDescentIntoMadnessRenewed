@@ -40,7 +40,7 @@ public class SanityMod
     private GuiHandler m_gui;
 
     private static SanityMod m_inst;
-    public static final String MODID = "sanitydim";
+    public static final String MODID = "sanitydimr";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =

@@ -2,33 +2,33 @@
 	"insanity": {
 		"category": "ambient",
 		"sounds": [
-			"sanitydim:insanity1"
+			"sanitydimr:insanity1"
 		]
 	},
 	"heartbeat": {
 		"category": "ambient",
 		"sounds": [
-			"sanitydim:heartbeat"
+			"sanitydimr:heartbeat"
 		]
 	},
 	"swish": {
 		"category": "ambient",
 		"sounds": [
-			"sanitydim:swish0",
-			"sanitydim:swish1",
-			"sanitydim:swish2",
-			"sanitydim:swish3",
-			"sanitydim:swish4"
+			"sanitydimr:swish0",
+			"sanitydimr:swish1",
+			"sanitydimr:swish2",
+			"sanitydimr:swish3",
+			"sanitydimr:swish4"
 		]
 	},
 	"flowers_equip": {
 		"sounds": [
-			"sanitydim:leaves_rustle"
+			"sanitydimr:leaves_rustle"
 		]
 	},
 	"inner_entity_hurt": {
 		"sounds": [
-			"sanitydim:whoosh"
+			"sanitydimr:whoosh"
 		]
 	}
 }

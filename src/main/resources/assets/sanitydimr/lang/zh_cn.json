@@ -1,0 +1,35 @@
+{
+	"itemGroup.sanitydimr": "理智：疯狂坠落·重制版",
+	"entity.sanitydimr.rotting_stalker": "腐烂尾随者",
+	"entity.sanitydimr.sneaking_terror": "潜行惧影",
+
+	"commands.sanity.set.success": "已将 %s 的理智值设为 %s",
+	"commands.sanity.add.success": "已为 %s 增加 %s 点理智",
+	"commands.sanity.config.reload": "维度配置重载成功",
+
+	"gui.sanitydimr.hint00": "这是什么声音？",
+	"gui.sanitydimr.hint01": "我有点心神不宁",
+	"gui.sanitydimr.hint02": "那是什么？",
+	"gui.sanitydimr.hint03": "好奇怪的感觉……",
+	"gui.sanitydimr.hint04": "我讨厌这种感觉……",
+	"gui.sanitydimr.hint05": "嗯？",
+	"gui.sanitydimr.hint06": "咦？",
+	"gui.sanitydimr.hint07": "什么？",
+	"gui.sanitydimr.hint08": "那里有什么？",
+	"gui.sanitydimr.hint09": "那是我吗？",
+	"gui.sanitydimr.hint010": "真奇怪……",
+	"gui.sanitydimr.hint011": "我刚刚是不是看到了什么？",
+	"gui.sanitydimr.hint10": "有人在我身后",
+	"gui.sanitydimr.hint11": "一、二、三、四……",
+	"gui.sanitydimr.hint12": "……五、六、七、八……",
+	"gui.sanitydimr.hint13": "它们在我脑子里",
+	"gui.sanitydimr.hint14": "离我远点",
+	"gui.sanitydimr.hint15": "保持专注",
+	"gui.sanitydimr.hint16": "它们为什么就是不走？！",
+	"gui.sanitydimr.hint17": "太吵了太吵了太吵了",
+	"gui.sanitydimr.hint18": "那些声音……我受不了……",
+
+	"item.sanitydimr.tooltip.press_shift": "§7按下 §9SHIFT§7 查看更多信息",
+	"item.sanitydimr.garland": "花环",
+	"item.sanitydimr.garland.tooltip": "§7帮助安抚神经的头饰\n\n缓慢恢复理智，并使你略微更能抵抗精神压力"
+}
