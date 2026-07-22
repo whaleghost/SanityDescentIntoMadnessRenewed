@@ -36,7 +36,7 @@ org.gradle.daemon=false
 mod_id=sanitydim
 spec_version=1
 mod_version=1.1.0
-developer=croissantnova
+developer=whaleghost
 archives_base_name=sanitydim
 
 minecraft_version=1.21.1
@@ -337,11 +337,11 @@ NeoForge 1.21.1 的能力系统与 Forge 有较大差异。
   {
 -   "minVersion": "0.7.11",
 -   "compatibilityLevel": "JAVA_17",
--   "package": "croissantnova.sanitydim.mixin",
+-   "package": "whaleghost.sanitydimr.mixin",
 -   "refmap": "sanitydim.refmap.json",
 +   "minVersion": "0.8.5",
 +   "compatibilityLevel": "JAVA_21",
-+   "package": "croissantnova.sanitydim.mixin",
++   "package": "whaleghost.sanitydimr.mixin",
 +   "refmap": "sanitydim.refmap.json",
     "mixins": [...],
     "client": [...],
@@ -535,17 +535,17 @@ modLoader="javafml"
 loaderVersion="[4,)"         # NeoForge 的 FML 版本
 
 license="All rights reserved"
-issueTrackerURL="https://github.com/croissantnova/SanityDescentIntoMadness/issues"
+issueTrackerURL="https://github.com/whaleghost/SanityDescentIntoMadness/issues"
 
 [[mods]]
 modId="sanitydim"
 version="${file.jarVersion}"
 displayName="Sanity: Descent Into Madness"
-updateJSONURL="https://raw.githubusercontent.com/croissantnova/SanityDescentIntoMadness/main/update.json"
+updateJSONURL="https://raw.githubusercontent.com/whaleghost/SanityDescentIntoMadness/main/update.json"
 displayURL="https://modrinth.com/mod/sanity-descent-into-madness"
 logoFile="sanitydim512.png"
 credits="toujourspareil, Zapsplat"
-authors="croissantnova"
+authors="whaleghost"
 description='''Brings the sanity mechanic from Don't Starve into Minecraft'''
 
 [[dependencies.sanitydim]]

@@ -1,0 +1,29 @@
+package whaleghost.sanitydimr.item;
+
+import whaleghost.sanitydimr.SanityMod;
+import whaleghost.sanitydimr.client.ItemTooltipHelper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import java.util.List;
+import org.jetbrains.annotations.NotNull;
+
+public class GarlandItem extends ArmorItem
+{
+    public GarlandItem()
+    {
+        super(SanityMod.FLOWER_ARMOR_MATERIAL, ArmorItem.Type.HELMET, new Properties()
+                .durability(ArmorItem.Type.HELMET.getDurability(25))
+                .stacksTo(1)
+                .setNoRepair());
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack pStack, @NotNull Item.TooltipContext pContext, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced)
+    {
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
+        ItemTooltipHelper.showTooltipOnShift(pTooltipComponents, "garland");
+    }
+}

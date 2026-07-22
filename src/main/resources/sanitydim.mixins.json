@@ -1,7 +1,7 @@
 {
   "minVersion": "0.8.5",
   "compatibilityLevel": "JAVA_21",
-  "package": "croissantnova.sanitydim.mixin",
+  "package": "whaleghost.sanitydimr.mixin",
   "refmap": "sanitydim.refmap.json",
   "mixins": [
     "MixinAnimal",

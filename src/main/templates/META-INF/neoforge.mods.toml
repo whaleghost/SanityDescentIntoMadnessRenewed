@@ -16,7 +16,7 @@ updateJSONURL="https://raw.githubusercontent.com/croissantnova/SanityDescentInto
 displayURL="https://modrinth.com/mod/sanity-descent-into-madness"
 logoFile="sanitydim512.png"
 credits="toujourspareil, Zapsplat"
-authors="croissantnova"
+authors="whaleghost"
 description='''Brings the sanity mechanic from Don't Starve into Minecraft'''
 
 [[mixins]]
