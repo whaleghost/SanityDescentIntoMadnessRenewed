@@ -1,8 +1,6 @@
 package whaleghost.sanitydimr.command;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -35,22 +33,29 @@ public class SanityCommand {
             .then(Commands.argument("value", FloatArgumentType.floatArg(MIN_SANITY, MAX_SANITY))
                 .executes(ctx -> {
                     var source = ctx.getSource();
-                    return applySet(
-                        source,
-                        Collections.singleton((ServerPlayer) source.getEntityOrException()),
-                        FloatArgumentType.getFloat(ctx, "value")
+                    var player = (ServerPlayer) source.getEntityOrException();
+                    var value = FloatArgumentType.getFloat(ctx, "value");
+                    applySet(player, value);
+                    source.sendSuccess(() ->
+                        Component.translatable("commands.sanity.set.success", player.getDisplayName(), value),
+                        true
                     );
+                    return (int) value;
                 })
             )
-            .then(Commands.argument("targets", EntityArgument.players())
+            .then(Commands.argument("target", EntityArgument.player())
                 .then(Commands.argument("value", FloatArgumentType.floatArg(MIN_SANITY, MAX_SANITY))
-                    .executes(ctx ->
-                        applySet(
-                            ctx.getSource(),
-                            EntityArgument.getPlayers(ctx, "targets"),
-                            FloatArgumentType.getFloat(ctx, "value")
-                        )
-                    )
+                    .executes(ctx -> {
+                        var source = ctx.getSource();
+                        var player = EntityArgument.getPlayer(ctx, "target");
+                        var value = FloatArgumentType.getFloat(ctx, "value");
+                        applySet(player, value);
+                        source.sendSuccess(() ->
+                            Component.translatable("commands.sanity.set.success", player.getDisplayName(), value),
+                            true
+                        );
+                        return (int) value;
+                    })
                 )
             );
     }
@@ -61,22 +66,29 @@ public class SanityCommand {
             .then(Commands.argument("value", FloatArgumentType.floatArg(-MAX_SANITY, MAX_SANITY))
                 .executes(ctx -> {
                     var source = ctx.getSource();
-                    return applyAdd(
-                        source,
-                        Collections.singleton((ServerPlayer) source.getEntityOrException()),
-                        FloatArgumentType.getFloat(ctx, "value")
+                    var player = (ServerPlayer) source.getEntityOrException();
+                    var delta = FloatArgumentType.getFloat(ctx, "value");
+                    applyAdd(player, delta);
+                    source.sendSuccess(() ->
+                        Component.translatable("commands.sanity.add.success", delta, player.getDisplayName()),
+                        true
                     );
+                    return (int) delta;
                 })
             )
-            .then(Commands.argument("targets", EntityArgument.players())
+            .then(Commands.argument("target", EntityArgument.player())
                 .then(Commands.argument("value", FloatArgumentType.floatArg(-MAX_SANITY, MAX_SANITY))
-                    .executes(ctx ->
-                        applyAdd(
-                            ctx.getSource(),
-                            EntityArgument.getPlayers(ctx, "targets"),
-                            FloatArgumentType.getFloat(ctx, "value")
-                        )
-                    )
+                    .executes(ctx -> {
+                        var source = ctx.getSource();
+                        var player = EntityArgument.getPlayer(ctx, "target");
+                        var delta = FloatArgumentType.getFloat(ctx, "value");
+                        applyAdd(player, delta);
+                        source.sendSuccess(() ->
+                            Component.translatable("commands.sanity.add.success", delta, player.getDisplayName()),
+                            true
+                        );
+                        return (int) delta;
+                    })
                 )
             );
     }
@@ -89,64 +101,25 @@ public class SanityCommand {
                 DimensionConfig.init();
                 ctx.getSource().sendSuccess(
                     () -> Component.translatable("commands.sanity.config.reload"), true);
-                return 1;
+                return Command.SINGLE_SUCCESS;
             }));
     }
 
-    // -- Sanity mutation helpers --
-    private static int applySet(CommandSourceStack source,
-                                Collection<? extends ServerPlayer> targets,
-                                float value)
-    {
-        for (var player : targets)
-            player.getData(Sanity.ATTACHMENT).setSanity(toStored(value));
+    // -- Single-player mutations --
 
-        sendSetFeedback(source, value, targets);
-        return (int) value;
+    private static void applySet(ServerPlayer player, float value)
+    {
+        player.getData(Sanity.ATTACHMENT).setSanity(toStored(value));
     }
 
-    private static int applyAdd(CommandSourceStack source,
-                                Collection<? extends ServerPlayer> targets,
-                                float delta)
+    private static void applyAdd(ServerPlayer player, float delta)
     {
-        for (var player : targets) {
-            var sanity = player.getData(Sanity.ATTACHMENT);
-            sanity.setSanity(sanity.getSanity() - delta / MAX_SANITY);
-        }
-
-        sendAddFeedback(source, delta, targets);
-        return (int) delta;
+        var sanity = player.getData(Sanity.ATTACHMENT);
+        sanity.setSanity(sanity.getSanity() - delta / MAX_SANITY);
     }
 
     private static float toStored(float displayValue)
     {
         return (MAX_SANITY - displayValue) / MAX_SANITY;
-    }
-
-    // -- Feedback --
-    private static void sendSetFeedback(CommandSourceStack source, float value,
-                                        Collection<? extends ServerPlayer> targets)
-    {
-        if (targets.size() == 1) {
-            source.sendSuccess(() -> Component.translatable(
-                "commands.sanity.set.success.single",
-                targets.iterator().next().getDisplayName(), value), true);
-        } else {
-            source.sendSuccess(() -> Component.translatable(
-                "commands.sanity.set.success.multiple", value, targets.size()), true);
-        }
-    }
-
-    private static void sendAddFeedback(CommandSourceStack source, float delta,
-                                        Collection<? extends ServerPlayer> targets)
-    {
-        if (targets.size() == 1) {
-            source.sendSuccess(() -> Component.translatable(
-                "commands.sanity.add.success.single",
-                delta, targets.iterator().next().getDisplayName()), true);
-        } else {
-            source.sendSuccess(() -> Component.translatable(
-                "commands.sanity.add.success.multiple", targets.size(), delta), true);
-        }
     }
 }
