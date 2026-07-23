@@ -4,25 +4,49 @@ import net.minecraft.client.DeltaTracker;
 import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import whaleghost.sanitydimr.SanityMod;
 import whaleghost.sanitydimr.SanityProcessor;
+import whaleghost.sanitydimr.capability.Sanity;
 import whaleghost.sanitydimr.capability.SanityLevelChunk;
 import whaleghost.sanitydimr.client.SoundPlayback;
+import whaleghost.sanitydimr.client.render.layer.Blackout;
 import whaleghost.sanitydimr.command.SanityCommand;
+import whaleghost.sanitydimr.entity.goal.AvoidInsanePlayerGoal;
+import whaleghost.sanitydimr.entity.goal.TargetInsanePlayerGoal;
+import whaleghost.sanitydimr.sound.SoundRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.projectile.ThrownEgg;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.PlayLevelSoundEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.VanillaGameEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -30,6 +54,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -180,4 +205,107 @@ public class EventHandler
         if (event.getLevel() instanceof ClientLevel)
             SoundPlayback.onClientLevelLoad((ClientLevel) event.getLevel());
     }
+
+    @SubscribeEvent
+    public void onEntityJoinLevel(final EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof Cow cow) {
+            cow.goalSelector.addGoal(-1,
+                    new AvoidInsanePlayerGoal(cow, 6.0f, 1.7d, 1.8d));
+        } else if (event.getEntity() instanceof Chicken chicken) {
+            chicken.goalSelector.addGoal(-1,
+                    new AvoidInsanePlayerGoal(chicken, 6.0f, 1.5d, 1.6d));
+        } else if (event.getEntity() instanceof Pig pig) {
+            pig.goalSelector.addGoal(-1,
+                    new AvoidInsanePlayerGoal(pig, 6.0f, 1.6d, 1.7d));
+        } else if (event.getEntity() instanceof Sheep sheep) {
+            sheep.goalSelector.addGoal(-1,
+                    new AvoidInsanePlayerGoal(sheep, 6.0f, 1.6d, 1.7d));
+        } else if (event.getEntity() instanceof ZombifiedPiglin zp) {
+            zp.targetSelector.addGoal(1,
+                    new TargetInsanePlayerGoal(zp, true, .7f).setAlertOthers());
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityInteract(final PlayerInteractEvent.EntityInteract event) {
+        if (event.getEntity().level().isClientSide())
+            return;
+        if (!(event.getEntity() instanceof ServerPlayer sp))
+            return;
+
+        // 使用剪刀时始终记录（与原始 MixinShearsItem 行为一致）
+        if (event.getTarget() instanceof Shearable
+                && event.getItemStack().getItem() instanceof ShearsItem) {
+            SanityProcessor.handlePlayerUsedShears(sp);
+        }
+
+        Sanity s = sp.getData(Sanity.ATTACHMENT);
+
+        if (event.getTarget() instanceof Villager) {
+            if (s.getSanity() >= .6f) {
+                event.setCanceled(true);
+            }
+        } else if (event.getTarget() instanceof Animal) {
+            if (s.getSanity() >= Blackout.THRESHOLD) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRightClickBlock(final PlayerInteractEvent.RightClickBlock event) {
+        if (event.getEntity() instanceof ServerPlayer sp
+                && event.getLevel().getBlockState(event.getHitVec().getBlockPos()).getBlock() instanceof FlowerPotBlock
+                && sp.getItemInHand(event.getHand()).is(ItemTags.FLOWERS)) {
+            SanityProcessor.handlePlayerPottedFlower(sp);
+        }
+    }
+
+    @SubscribeEvent
+    public void onBlockBreak(final BlockEvent.BreakEvent event) {
+        if (event.getPlayer() instanceof ServerPlayer sp) {
+            Block block = event.getState().getBlock();
+            boolean notCreative = !sp.isCreative();
+            SanityProcessor.handlePlayerMinedBlock(sp, event.getPos(), event.getState(), block, notCreative);
+        }
+    }
+
+    @SubscribeEvent
+    public void onProjectileImpact(final ProjectileImpactEvent event) {
+        if (event.getProjectile() instanceof ThrownEgg egg
+                && egg.getOwner() instanceof ServerPlayer sp) {
+            SanityProcessor.handlePlayerSpawnedChicken(sp);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onPlaySound(final PlayLevelSoundEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null || player.isCreative() || player.isSpectator())
+            return;
+
+        Sanity s = player.getData(Sanity.ATTACHMENT);
+        if (s.getSanity() < Blackout.THRESHOLD)
+            return;
+
+        Holder<SoundEvent> soundHolder = event.getSound();
+        if (soundHolder == null)
+            return;
+
+        SoundEvent soundEvent = soundHolder.value();
+
+        if (soundEvent.equals(SoundEvents.CHICKEN_AMBIENT)
+                || soundEvent.equals(SoundEvents.COW_AMBIENT)
+                || soundEvent.equals(SoundEvents.PIG_AMBIENT)
+                || soundEvent.equals(SoundEvents.SHEEP_AMBIENT)) {
+            event.setCanceled(true);
+        } else if (soundEvent.equals(SoundEvents.CHICKEN_HURT) || soundEvent.equals(SoundEvents.CHICKEN_DEATH)
+                || soundEvent.equals(SoundEvents.COW_HURT) || soundEvent.equals(SoundEvents.COW_DEATH)
+                || soundEvent.equals(SoundEvents.PIG_HURT) || soundEvent.equals(SoundEvents.PIG_DEATH)
+                || soundEvent.equals(SoundEvents.SHEEP_HURT) || soundEvent.equals(SoundEvents.SHEEP_DEATH)) {
+            event.setSound(SoundRegistry.INNER_ENTITY_HURT);
+        }
+    }
+
 }
