@@ -36,23 +36,17 @@ public class PostProcessor
         Minecraft mc = Minecraft.getInstance();
         PostPass inPass;
         PostPass outPass;
-        try
-        {
-            inPass = new PostPass(mc.getResourceManager(), "shaders/post/" + in + ".json", mc.getMainRenderTarget(), m_swapBuffer, false);
+        try {
+            inPass = new PostPass(mc.getResourceManager(), in, mc.getMainRenderTarget(), m_swapBuffer, false);
             inPass.setOrthoMatrix(m_orthoMat);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-        try
-        {
-            outPass = new PostPass(mc.getResourceManager(), "shaders/post/" + out + ".json", m_swapBuffer, mc.getMainRenderTarget(), false);
+        try {
+            outPass = new PostPass(mc.getResourceManager(), out, m_swapBuffer, mc.getMainRenderTarget(), false);
             outPass.setOrthoMatrix(m_orthoMat);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
