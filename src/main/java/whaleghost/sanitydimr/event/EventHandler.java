@@ -2,7 +2,6 @@ package whaleghost.sanitydimr.event;
 
 import net.minecraft.client.DeltaTracker;
 import net.neoforged.neoforge.client.event.RenderFrameEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.IShearable;
 import whaleghost.sanitydimr.SanityMod;
 import whaleghost.sanitydimr.SanityProcessor;
@@ -192,15 +191,6 @@ public class EventHandler {
         DeltaTracker delta = event.getPartialTick();
         float deltaInTicks = delta.getGameTimeDeltaTicks();
         SanityMod.getInstance().getGui().tick(deltaInTicks);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void onRenderLevelStage(final RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
-            SanityMod.getInstance().getGui().initPostProcessor();
-            SanityMod.getInstance().getGui().renderPostProcess(event.getPartialTick().getGameTimeDeltaTicks());
-        }
     }
 
     @OnlyIn(Dist.CLIENT)
