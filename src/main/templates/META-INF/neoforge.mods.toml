@@ -6,18 +6,17 @@ loaderVersion="${loader_version_range}"
 
 license="${mod_license}"
 
-issueTrackerURL="https://github.com/croissantnova/SanityDescentIntoMadness/issues"
+issueTrackerURL="https://github.com/whaleghost/SanityDescentIntoMadnessRenewed/issues"
 
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
-updateJSONURL="https://raw.githubusercontent.com/croissantnova/SanityDescentIntoMadness/main/update.json"
-displayURL="https://modrinth.com/mod/sanity-descent-into-madness"
+displayURL="https://github.com/whaleghost/SanityDescentIntoMadnessRenewed"
 logoFile="sanitydim512.png"
-credits="toujourspareil, Zapsplat"
+credits="croissantnova, toujourspareil, Zapsplat"
 authors="whaleghost"
-description='''Brings the sanity mechanic from Don't Starve into Minecraft'''
+description='''Brings the sanity mechanic from Don't Starve into Minecraft. Refactored from croissantnova/SanityDescentIntoMadness.'''
 
 [[mixins]]
 config="sanitydimr.mixins.json"
