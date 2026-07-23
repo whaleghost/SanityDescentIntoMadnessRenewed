@@ -1,11 +1,12 @@
 package whaleghost.sanitydimr.event;
 
+import net.minecraft.client.DeltaTracker;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import whaleghost.sanitydimr.SanityMod;
 import whaleghost.sanitydimr.SanityProcessor;
 import whaleghost.sanitydimr.capability.SanityLevelChunk;
 import whaleghost.sanitydimr.client.SoundPlayback;
 import whaleghost.sanitydimr.command.SanityCommand;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -161,8 +162,15 @@ public class EventHandler
         if (event.getEntity() instanceof LocalPlayer localPlayer)
         {
             SoundPlayback.playSounds(localPlayer);
-            SanityMod.getInstance().getGui().tick(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false));
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onRenderFrame(final RenderFrameEvent.Post event) {
+        DeltaTracker delta = event.getPartialTick();
+        float deltaInTicks = delta.getGameTimeDeltaTicks();
+        SanityMod.getInstance().getGui().tick(deltaInTicks);
     }
 
     @OnlyIn(Dist.CLIENT)
