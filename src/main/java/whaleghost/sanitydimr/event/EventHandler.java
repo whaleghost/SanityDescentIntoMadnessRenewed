@@ -55,10 +55,15 @@ public class EventHandler
     @SubscribeEvent
     public void onLivingDamage(final LivingDamageEvent.Pre event)
     {
-        if (event.getEntity() instanceof ServerPlayer player)
+        if (event.getEntity() instanceof ServerPlayer player) {
             SanityProcessor.handlePlayerHurt(player, event.getNewDamage());
-        else if (event.getEntity() instanceof Animal animal && event.getSource().getEntity() instanceof ServerPlayer player)
-            SanityProcessor.handlePlayerHurtAnimal(player, animal, event.getNewDamage());
+        } else if (
+                event.getEntity() instanceof Animal animal &&
+                event.getSource().getEntity() instanceof ServerPlayer player
+        ) {
+            float realDamage = Math.min(animal.getHealth(), event.getNewDamage());
+            SanityProcessor.handlePlayerHurtAnimal(player, animal, realDamage);
+        }
     }
 
     @SubscribeEvent

@@ -303,7 +303,7 @@ public final class SanityProcessor
         Sanity s = player.getData(Sanity.ATTACHMENT);
         {
             ResourceLocation dimLoc = player.level().dimension().location();
-            addSanity(s, amount * ConfigProxy.getAnimalHurtRatio(player.level().dimension().location()) * (animal.isBaby() ? 2.0f : 1.0f), player);
+            addSanity(s, amount * ConfigProxy.getAnimalHurtRatio(dimLoc) * (animal.isBaby() ? 2.0f : 1.0f), player);
 //            s.setSanity(s.getSanity() + amount * ConfigProxy.getAnimalHurtRatio(player.level().dimension().location()) * (animal.isBaby() ? 2.0f : 1.0f));
         }
     }
@@ -316,7 +316,7 @@ public final class SanityProcessor
         Sanity s = player.getData(Sanity.ATTACHMENT);
         {
             ResourceLocation dimLoc = player.level().dimension().location();
-            addSanity(s, ConfigProxy.getPetDeath(player.level().dimension().location()), player);
+            addSanity(s, ConfigProxy.getPetDeath(dimLoc), player);
 //            s.setSanity(s.getSanity() + ConfigProxy.getPetDeath(player.level().dimension().location()));
         }
     }
