@@ -2,7 +2,9 @@
 	"insanity": {
 		"category": "ambient",
 		"sounds": [
-			"sanitydimr:insanity1"
+			"sanitydimr:insanity1",
+			"sanitydimr:insanity2",
+			"sanitydirm:insanity3"
 		]
 	},
 	"heartbeat": {
