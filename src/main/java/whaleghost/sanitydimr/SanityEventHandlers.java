@@ -31,7 +31,7 @@ public final class SanityEventHandlers {
 
     static void handleActiveSourceForPlayer(
             ServerPlayer player,
-            int id,
+            ActiveSanitySource source,
             Function<ResourceLocation, Integer> cdSupplier,
             Function<ResourceLocation, Float> sanitySupplier) {
 
@@ -43,6 +43,7 @@ public final class SanityEventHandlers {
         int cd = cdSupplier.apply(dimLoc);
 
         if (s instanceof IPersistentSanity ps && cd > 0.0f) {
+            int id = source.ordinal();
             int timePassed = cd - ps.getActiveSourcesCooldowns()[id];
             SanityProcessor.addSanity(
                     s, sanitySupplier.apply(dimLoc) * MathHelper.clampNorm((float) timePassed / cd), player);
@@ -56,7 +57,7 @@ public final class SanityEventHandlers {
         for (ServerPlayer player : level.players()) {
             if (player.isCreative() || player.isSpectator())
                 continue;
-            handleActiveSourceForPlayer(player, ActiveSanitySources.SLEEPING,
+            handleActiveSourceForPlayer(player, ActiveSanitySource.SLEEPING,
                     ConfigProxy::getSleepingCooldown, ConfigProxy::getSleeping);
         }
     }
@@ -108,35 +109,35 @@ public final class SanityEventHandlers {
     public static void handlePlayerBredAnimals(ServerPlayer player) {
         if (player == null || player.isCreative() || player.isSpectator())
             return;
-        handleActiveSourceForPlayer(player, ActiveSanitySources.BREEDING_ANIMALS,
+        handleActiveSourceForPlayer(player, ActiveSanitySource.BREEDING_ANIMALS,
                 ConfigProxy::getAnimalBreedingCooldown, ConfigProxy::getAnimalBreeding);
     }
 
     public static void handlePlayerTradedWithVillager(ServerPlayer player) {
         if (player == null || player.isCreative() || player.isSpectator())
             return;
-        handleActiveSourceForPlayer(player, ActiveSanitySources.VILLAGER_TRADE,
+        handleActiveSourceForPlayer(player, ActiveSanitySource.VILLAGER_TRADE,
                 ConfigProxy::getVillagerTradeCooldown, ConfigProxy::getVillagerTrade);
     }
 
     public static void handlePlayerUsedShears(ServerPlayer player) {
         if (player == null || player.isCreative() || player.isSpectator())
             return;
-        handleActiveSourceForPlayer(player, ActiveSanitySources.SHEARING,
+        handleActiveSourceForPlayer(player, ActiveSanitySource.SHEARING,
                 ConfigProxy::getShearingCooldown, ConfigProxy::getShearing);
     }
 
     public static void handlePlayerSpawnedChicken(ServerPlayer player) {
         if (player == null || player.isCreative() || player.isSpectator())
             return;
-        handleActiveSourceForPlayer(player, ActiveSanitySources.SPAWNING_BABY_CHICKEN,
+        handleActiveSourceForPlayer(player, ActiveSanitySource.SPAWNING_BABY_CHICKEN,
                 ConfigProxy::getBabyChickenSpawningCooldown, ConfigProxy::getBabyChickenSpawning);
     }
 
     private static void handlePlayerAte(ServerPlayer player, ItemStack itemStack) {
         handleActiveSourceForPlayer(
                 player,
-                ActiveSanitySources.EATING,
+                ActiveSanitySource.EATING,
                 ConfigProxy::getEatingCooldown,
                 dim -> itemStack.getFoodProperties(player).nutrition() * ConfigProxy.getEating(dim));
     }
@@ -186,7 +187,7 @@ public final class SanityEventHandlers {
     public static void handlePlayerFishedItem(ServerPlayer player) {
         if (player == null || player.isCreative() || player.isSpectator())
             return;
-        handleActiveSourceForPlayer(player, ActiveSanitySources.FISHING,
+        handleActiveSourceForPlayer(player, ActiveSanitySource.FISHING,
                 ConfigProxy::getFishingCooldown, ConfigProxy::getFishing);
     }
 
@@ -265,7 +266,7 @@ public final class SanityEventHandlers {
     public static void handlePlayerPottedFlower(ServerPlayer player) {
         if (player == null || player.isCreative() || player.isSpectator())
             return;
-        handleActiveSourceForPlayer(player, ActiveSanitySources.POTTING_FLOWER,
+        handleActiveSourceForPlayer(player, ActiveSanitySource.POTTING_FLOWER,
                 ConfigProxy::getPottingFlowerCooldown, ConfigProxy::getPottingFlower);
     }
 
