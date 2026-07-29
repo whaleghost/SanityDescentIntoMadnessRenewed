@@ -136,59 +136,80 @@ public class SoundPlayback
 
         Minecraft mc = Minecraft.getInstance();
 
-        if (insanity == null || insanity.isStopped())
-        {
-            insanity = new InsanitySoundInstance();
-            mc.getSoundManager().play(insanity);
-        }
-        if (heartbeat == null || heartbeat.isStopped())
-        {
-            heartbeat = new HeartbeatSoundInstance();
-            mc.getSoundManager().play(heartbeat);
-        }
         Sanity cap = player.getData(Sanity.ATTACHMENT);
         {
             float insanityFactor = MathHelper.clampNorm(Mth.inverseLerp(cap.getSanity(), .55f, .8f));
             float heartbeatFactor = MathHelper.clampNorm(Mth.inverseLerp(cap.getSanity(), .7f, .8f));
-            if (Math.abs(insanityFactor - insanityTarget) >= .05f)
-            {
-                insanityTarget = insanityFactor;
-                insanityStart = insanity.factor;
-                insanityProgress = 0;
-            }
-            else
-            {
-                if (insanityProgress <= INSANITY_I11N_TIME)
-                    insanityTarget = insanityFactor;
-                else
-                    insanity.factor = insanityFactor;
-            }
-            if (Math.abs(heartbeatFactor - heartbeatTarget) >= .05f)
-            {
-                heartbeatTarget = heartbeatFactor;
-                heartbeatStart = heartbeat.factor;
-                heartbeatProgress = 0;
-            }
-            else
-            {
-                if (heartbeatProgress <= HEARTBEAT_I11N_TIME)
-                    heartbeatTarget = heartbeatFactor;
-                else
-                    heartbeat.factor = heartbeatFactor;
-            }
-            if (insanityProgress <= INSANITY_I11N_TIME)
-            {
-                insanity.factor = Mth.lerp((float)insanityProgress / INSANITY_I11N_TIME, insanityStart, insanityTarget);
-                insanityProgress++;
-            }
-            if (heartbeatProgress <= HEARTBEAT_I11N_TIME)
-            {
-                heartbeat.factor = Mth.lerp((float)heartbeatProgress / HEARTBEAT_I11N_TIME, heartbeatStart, heartbeatTarget);
-                heartbeatProgress++;
+
+            // Restart insanity sound on re-entry so Minecraft picks a fresh random variant
+            if (insanityFactor <= 0f) {
+                if (insanity != null && !insanity.isStopped()) {
+                    insanity.doStop();
+                    insanity = null;
+                }
+            } else if (insanity == null || insanity.isStopped()) {
+                insanity = new InsanitySoundInstance();
+                mc.getSoundManager().play(insanity);
+                insanityStart = 0f;
+                insanityTarget = 0f;
+                insanityProgress = INSANITY_I11N_TIME + 1;
             }
 
-            insanity.setPos(player.getEyePosition());
-            heartbeat.setPos(player.getEyePosition());
+            if (heartbeatFactor <= 0f) {
+                if (heartbeat != null && !heartbeat.isStopped()) {
+                    heartbeat.doStop();
+                    heartbeat = null;
+                }
+            } else if (heartbeat == null || heartbeat.isStopped()) {
+                heartbeat = new HeartbeatSoundInstance();
+                mc.getSoundManager().play(heartbeat);
+                heartbeatStart = 0f;
+                heartbeatTarget = 0f;
+                heartbeatProgress = HEARTBEAT_I11N_TIME + 1;
+            }
+            if (insanity != null) {
+                if (Math.abs(insanityFactor - insanityTarget) >= .05f)
+                {
+                    insanityTarget = insanityFactor;
+                    insanityStart = insanity.factor;
+                    insanityProgress = 0;
+                }
+                else
+                {
+                    if (insanityProgress <= INSANITY_I11N_TIME)
+                        insanityTarget = insanityFactor;
+                    else
+                        insanity.factor = insanityFactor;
+                }
+                if (insanityProgress <= INSANITY_I11N_TIME)
+                {
+                    insanity.factor = Mth.lerp((float)insanityProgress / INSANITY_I11N_TIME, insanityStart, insanityTarget);
+                    insanityProgress++;
+                }
+            }
+            if (heartbeat != null) {
+                if (Math.abs(heartbeatFactor - heartbeatTarget) >= .05f)
+                {
+                    heartbeatTarget = heartbeatFactor;
+                    heartbeatStart = heartbeat.factor;
+                    heartbeatProgress = 0;
+                }
+                else
+                {
+                    if (heartbeatProgress <= HEARTBEAT_I11N_TIME)
+                        heartbeatTarget = heartbeatFactor;
+                    else
+                        heartbeat.factor = heartbeatFactor;
+                }
+                if (heartbeatProgress <= HEARTBEAT_I11N_TIME)
+                {
+                    heartbeat.factor = Mth.lerp((float)heartbeatProgress / HEARTBEAT_I11N_TIME, heartbeatStart, heartbeatTarget);
+                    heartbeatProgress++;
+                }
+            }
+
+            if (insanity != null) insanity.setPos(player.getEyePosition());
+            if (heartbeat != null) heartbeat.setPos(player.getEyePosition());
 
             playFakeSteps(player, cap);
         }
