@@ -1,6 +1,9 @@
 package whaleghost.sanitydimr;
 
 import com.mojang.logging.LogUtils;
+import whaleghost.sanitydimr.capability.InnerEntityCapImpl;
+import whaleghost.sanitydimr.capability.Sanity;
+import whaleghost.sanitydimr.capability.SanityLevelChunk;
 import whaleghost.sanitydimr.client.GuiHandler;
 import whaleghost.sanitydimr.config.ConfigManager;
 import whaleghost.sanitydimr.entity.EntityRegistry;
@@ -50,6 +53,12 @@ public class SanityMod
         modEventBus.addListener(ModEventHandler::registerEntityRenderersEvent);
         modEventBus.addListener(PacketHandler::register);
         ATTACHMENT_TYPES.register(modEventBus);
+        Sanity.ATTACHMENT = ATTACHMENT_TYPES.register(
+                "sanity", () -> AttachmentType.serializable(Sanity::new).build());
+        SanityLevelChunk.ATTACHMENT = ATTACHMENT_TYPES.register(
+                "sanity_level_chunk", () -> AttachmentType.serializable(SanityLevelChunk::new).build());
+        InnerEntityCapImpl.ATTACHMENT = ATTACHMENT_TYPES.register(
+                "inner_entity_cap", () -> AttachmentType.builder(InnerEntityCapImpl::new).build());
         ModArmorMaterials.REGISTRY.register(modEventBus);
         NeoForge.EVENT_BUS.register(new ServerSanityEventHandler());
         NeoForge.EVENT_BUS.register(new EntityInteractionEventHandler());

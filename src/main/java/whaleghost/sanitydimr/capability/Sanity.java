@@ -5,7 +5,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import whaleghost.sanitydimr.ActiveSanitySources;
-import whaleghost.sanitydimr.SanityMod;
 import whaleghost.sanitydimr.util.MathHelper;
 
 import java.util.HashMap;
@@ -14,8 +13,8 @@ import java.util.function.Supplier;
 
 public class Sanity implements ISanity, IPassiveSanity, IPersistentSanity {
 
-    public static final Supplier<AttachmentType<Sanity>> ATTACHMENT = SanityMod.ATTACHMENT_TYPES.register(
-            "sanity", () -> AttachmentType.serializable(Sanity::new).build());
+    // Assigned by SanityMod during construction — deferred to avoid class-loading races
+    public static Supplier<AttachmentType<Sanity>> ATTACHMENT;
 
     private static final String[] CD_KEYS = {
             "sanity.sleeping", "sanity.baby_chicken_spawn", "sanity.animal_breeding",
