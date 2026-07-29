@@ -1,6 +1,6 @@
 package whaleghost.sanitydimr.capability;
 
-import whaleghost.sanitydimr.ICompoundTagSerializable;
+import whaleghost.sanitydimr.util.ICompoundTagSerializable;
 import net.minecraft.core.BlockPos;
 
 import java.util.List;

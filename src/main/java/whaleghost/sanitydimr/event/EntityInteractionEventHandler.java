@@ -21,7 +21,6 @@ import whaleghost.sanitydimr.capability.Sanity;
 import whaleghost.sanitydimr.client.render.layer.Blackout;
 import whaleghost.sanitydimr.entity.goal.AvoidInsanePlayerGoal;
 import whaleghost.sanitydimr.entity.goal.TargetInsanePlayerGoal;
-import whaleghost.sanitydimr.SanityEventHandlers;
 
 public class EntityInteractionEventHandler {
 

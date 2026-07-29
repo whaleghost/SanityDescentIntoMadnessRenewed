@@ -1,4 +1,4 @@
-package whaleghost.sanitydimr;
+package whaleghost.sanitydimr.item.material;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -8,6 +8,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import whaleghost.sanitydimr.SanityMod;
 import whaleghost.sanitydimr.sound.SoundRegistry;
 
 import java.util.EnumMap;

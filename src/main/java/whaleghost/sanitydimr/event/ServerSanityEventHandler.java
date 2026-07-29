@@ -20,7 +20,6 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import whaleghost.sanitydimr.command.SanityCommand;
-import whaleghost.sanitydimr.SanityEventHandlers;
 import whaleghost.sanitydimr.SanityMod;
 import whaleghost.sanitydimr.SanityProcessor;
 

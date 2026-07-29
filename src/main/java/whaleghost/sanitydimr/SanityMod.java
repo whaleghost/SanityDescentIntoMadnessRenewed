@@ -13,6 +13,7 @@ import whaleghost.sanitydimr.event.EntityInteractionEventHandler;
 import whaleghost.sanitydimr.event.ModEventHandler;
 import whaleghost.sanitydimr.event.ServerSanityEventHandler;
 import whaleghost.sanitydimr.item.ItemRegistry;
+import whaleghost.sanitydimr.item.material.ModArmorMaterials;
 import whaleghost.sanitydimr.net.PacketHandler;
 import whaleghost.sanitydimr.sound.SoundRegistry;
 import net.minecraft.resources.ResourceLocation;

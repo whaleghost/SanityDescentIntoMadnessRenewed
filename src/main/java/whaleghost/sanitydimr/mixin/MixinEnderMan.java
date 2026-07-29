@@ -1,6 +1,6 @@
 package whaleghost.sanitydimr.mixin;
 
-import whaleghost.sanitydimr.SanityEventHandlers;
+import whaleghost.sanitydimr.event.SanityEventHandlers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;

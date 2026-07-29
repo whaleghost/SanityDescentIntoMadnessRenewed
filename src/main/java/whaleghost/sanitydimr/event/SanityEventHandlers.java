@@ -1,4 +1,4 @@
-package whaleghost.sanitydimr;
+package whaleghost.sanitydimr.event;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
@@ -6,24 +6,23 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import whaleghost.sanitydimr.ActiveSanitySource;
+import whaleghost.sanitydimr.SanityMod;
+import whaleghost.sanitydimr.SanityProcessor;
 import whaleghost.sanitydimr.capability.IPersistentSanity;
 import whaleghost.sanitydimr.capability.Sanity;
 import whaleghost.sanitydimr.capability.SanityLevelChunk;
 import whaleghost.sanitydimr.config.*;
 import whaleghost.sanitydimr.util.MathHelper;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.core.component.DataComponents;
-import whaleghost.sanitydimr.item.ItemRegistry;
 
 public final class SanityEventHandlers {
 

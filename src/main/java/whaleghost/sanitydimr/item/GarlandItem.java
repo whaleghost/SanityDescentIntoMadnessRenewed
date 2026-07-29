@@ -1,6 +1,6 @@
 package whaleghost.sanitydimr.item;
 
-import whaleghost.sanitydimr.ModArmorMaterials;
+import whaleghost.sanitydimr.item.material.ModArmorMaterials;
 import whaleghost.sanitydimr.client.ItemTooltipHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;

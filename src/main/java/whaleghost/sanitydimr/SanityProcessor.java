@@ -1,7 +1,6 @@
 package whaleghost.sanitydimr;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,9 +17,11 @@ import whaleghost.sanitydimr.capability.*;
 import whaleghost.sanitydimr.config.ConfigProxy;
 import whaleghost.sanitydimr.entity.InnerEntity;
 import whaleghost.sanitydimr.entity.InnerEntitySpawner;
+import whaleghost.sanitydimr.event.SanityEventHandlers;
 import whaleghost.sanitydimr.item.ItemRegistry;
 import whaleghost.sanitydimr.net.InnerEntityCapImplPacket;
 import whaleghost.sanitydimr.net.SanityPacket;
+import whaleghost.sanitydimr.passive.PassiveSanityCalculator;
 
 import java.util.*;
 

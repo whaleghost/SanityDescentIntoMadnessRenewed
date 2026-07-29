@@ -9,7 +9,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.VanillaGameEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import whaleghost.sanitydimr.capability.SanityLevelChunk;
-import whaleghost.sanitydimr.SanityEventHandlers;
 
 public class BlockEventHandler {
 

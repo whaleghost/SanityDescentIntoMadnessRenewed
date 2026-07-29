@@ -1,15 +1,13 @@
-package whaleghost.sanitydimr;
+package whaleghost.sanitydimr.passive;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import whaleghost.sanitydimr.SanityProcessor;
 import whaleghost.sanitydimr.capability.ISanity;
 import whaleghost.sanitydimr.config.ConfigProxy;
 import whaleghost.sanitydimr.item.ItemRegistry;
-import whaleghost.sanitydimr.passive.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +35,7 @@ public final class PassiveSanityCalculator {
 
     private PassiveSanityCalculator() {}
 
-    static float calcPassive(ServerPlayer player, ISanity sanity) {
+    public static float calcPassive(ServerPlayer player, ISanity sanity) {
         ResourceLocation dim = player.level().dimension().location();
         float passive = 0;
 
