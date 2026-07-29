@@ -1,6 +1,6 @@
 package whaleghost.sanitydimr.item;
 
-import whaleghost.sanitydimr.SanityMod;
+import whaleghost.sanitydimr.ModArmorMaterials;
 import whaleghost.sanitydimr.client.ItemTooltipHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
@@ -14,7 +14,7 @@ public class GarlandItem extends ArmorItem
 {
     public GarlandItem()
     {
-        super(SanityMod.FLOWER_ARMOR_MATERIAL, ArmorItem.Type.HELMET, new Properties()
+        super(ModArmorMaterials.FLOWER, ArmorItem.Type.HELMET, new Properties()
                 .durability(ArmorItem.Type.HELMET.getDurability(25))
                 .stacksTo(1)
                 .setNoRepair());

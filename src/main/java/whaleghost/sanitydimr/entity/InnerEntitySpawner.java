@@ -20,9 +20,16 @@ public abstract class InnerEntitySpawner
 {
     private static final RandomSource RAND = RandomSource.create();
 
-    public static int spawnRad = 20;
-    public static int detectionRad = 40;
-    public static int spawnTimeout = 20 * 20;
+    private static int m_spawnRadius = 20;
+    private static int m_detectionRadius = 40;
+    private static int m_spawnTimeout = 20 * 20;
+
+    public static int getSpawnRadius() { return m_spawnRadius; }
+    public static void setSpawnRadius(int r) { m_spawnRadius = r; }
+    public static int getDetectionRadius() { return m_detectionRadius; }
+    public static void setDetectionRadius(int r) { m_detectionRadius = r; }
+    public static int getSpawnTimeout() { return m_spawnTimeout; }
+    public static void setSpawnTimeout(int t) { m_spawnTimeout = t; }
 
     public static final float SPAWN_THRESHOLD = .75f;
     public static final Map<ServerPlayer, Integer> PLAYER_TO_SPAWN_TIMEOUT = new HashMap<ServerPlayer, Integer>();
@@ -63,7 +70,7 @@ public abstract class InnerEntitySpawner
         ISanity s = player.getData(Sanity.ATTACHMENT);
         if (s == null)
             return false;
-        if (s.getSanity() < SPAWN_THRESHOLD || getInnerEntitiesInRadius(player.level(), player.blockPosition(), detectionRad).size() >= 3)
+        if (s.getSanity() < SPAWN_THRESHOLD || getInnerEntitiesInRadius(player.level(), player.blockPosition(), m_detectionRadius).size() >= 3)
             return false;
 
         int index = RAND.nextInt(EntityRegistry.INNER_ENTITIES.size());
@@ -72,13 +79,13 @@ public abstract class InnerEntitySpawner
             return false;
 
         BlockPos trialPos = BlockPos.randomBetweenClosed(RAND, 1,
-                player.blockPosition().getX() - spawnRad,
+                player.blockPosition().getX() - m_spawnRadius,
                 player.blockPosition().getY(),
-                player.blockPosition().getZ() - spawnRad,
-                player.blockPosition().getX() + spawnRad,
+                player.blockPosition().getZ() - m_spawnRadius,
+                player.blockPosition().getX() + m_spawnRadius,
                 player.blockPosition().getY(),
-                player.blockPosition().getZ() + spawnRad).iterator().next();
-        int h = getHeightForSpawning(player.level(), trialPos, spawnRad);
+                player.blockPosition().getZ() + m_spawnRadius).iterator().next();
+        int h = getHeightForSpawning(player.level(), trialPos, m_spawnRadius);
 
         if (h == 0)
             return false;
@@ -89,7 +96,7 @@ public abstract class InnerEntitySpawner
                 player.level().noCollision(entity) &&
                 ((ServerLevel)player.level()).tryAddFreshEntityWithPassengers(entity))
         {
-            PLAYER_TO_SPAWN_TIMEOUT.put(player, spawnTimeout);
+            PLAYER_TO_SPAWN_TIMEOUT.put(player, m_spawnTimeout);
             return true;
         }
 

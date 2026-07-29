@@ -86,6 +86,17 @@ public class GuiHandler {
         }
     }
 
+    private boolean canRender() {
+        return minecraft.player != null
+                && !minecraft.player.isCreative()
+                && !minecraft.player.isSpectator();
+    }
+
+    private ISanity getSanity() {
+        if (!canRender()) return null;
+        return minecraft.player.getData(Sanity.ATTACHMENT);
+    }
+
     private void initSanityPostProcess() {
         Minecraft mc = Minecraft.getInstance();
         postProcessor.addSinglePassEntry("insanity", pass ->
@@ -125,14 +136,13 @@ public class GuiHandler {
     }
 
     private void renderSanityIndicator(GuiGraphics graphics, DeltaTracker deltaTracker) {
-        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-        if (
-            minecraft.player == null || minecraft.player.isCreative() || minecraft.player.isSpectator() ||
-            sanityCapability == null || !ConfigProxy.getRenderIndicator(minecraft.player.level().dimension().location())
-        ) {
+        if (!canRender() || !ConfigProxy.getRenderIndicator(minecraft.player.level().dimension().location())) {
             return;
         }
+        sanityCapability = getSanity();
+        if (sanityCapability == null) return;
+        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
         ResourceLocation dim = minecraft.player.level().dimension().location();
         float scale = ConfigProxy.getIndicatorScale(dim);
         if (scale <= 0f) {
@@ -282,15 +292,16 @@ public class GuiHandler {
     }
 
     private void renderHint(GuiGraphics graphics, DeltaTracker deltaTracker) {
-        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-        if (
-            minecraft.player == null || minecraft.player.isCreative()|| minecraft.player.isSpectator() ||
-            currentHint == null || sanityCapability == null || sanityCapability.getSanity() < SANITY_HINT_THRESHOLD ||
-            !ConfigProxy.getRenderHint(minecraft.player.level().dimension().location())
-        ) {
+        if (!canRender() || currentHint == null
+                || !ConfigProxy.getRenderHint(minecraft.player.level().dimension().location())) {
             return;
         }
+        sanityCapability = getSanity();
+        if (sanityCapability == null || sanityCapability.getSanity() < SANITY_HINT_THRESHOLD) {
+            return;
+        }
+        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.pose().pushPose();
@@ -312,12 +323,10 @@ public class GuiHandler {
     }
 
     private void renderBloodTendrilsOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
+        if (!canRender()) return;
+        ResourceLocation dim = minecraft.player.level().dimension().location();
         int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
         int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-        if (minecraft.player == null || minecraft.player.isCreative() || minecraft.player.isSpectator()) {
-            return;
-        }
-        ResourceLocation dim = minecraft.player.level().dimension().location();
         if (
             !ConfigProxy.getRenderBtOverlay(dim) ||
             !(ConfigProxy.getFlashBtOnShortBurst(dim) ||
@@ -335,10 +344,7 @@ public class GuiHandler {
     }
 
     public void tick(float dt) {
-        if (
-            minecraft.player == null || minecraft.player.isCreative() || minecraft.player.isSpectator() ||
-            minecraft.isPaused()
-        ) {
+        if (!canRender() || minecraft.isPaused()) {
             return;
         }
         sanityCapability = minecraft.player.getData(Sanity.ATTACHMENT);

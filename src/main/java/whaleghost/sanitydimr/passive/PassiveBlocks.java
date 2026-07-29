@@ -17,7 +17,6 @@ import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PassiveBlocks implements IPassiveSanitySource
 {
@@ -51,13 +50,8 @@ public class PassiveBlocks implements IPassiveSanitySource
                         {
                             if (block.m_naturallyGend)
                             {
-                                AtomicBoolean placedArtificially = new AtomicBoolean(false);
                                 SanityLevelChunk sl = player.level().getChunkAt(posAt).getData(SanityLevelChunk.ATTACHMENT);
-                                {
-                                    if (sl.getArtificiallyPlacedBlocks().contains(posAt))
-                                        placedArtificially.set(true);
-                                }
-                                if (placedArtificially.get())
+                                if (sl.getArtificiallyPlacedBlocks().contains(posAt))
                                     continue;
                             }
 

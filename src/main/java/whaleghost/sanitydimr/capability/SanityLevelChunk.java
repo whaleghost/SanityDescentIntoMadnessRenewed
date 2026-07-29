@@ -39,7 +39,7 @@ public class SanityLevelChunk implements ISanityLevelChunk
     {
         long[] arr = tag.getLongArray("sanity.blocks_placed_by_player");
         m_blocksPlacedByPlayer.clear();
-        for (int i = 0; i < arr.length / 3; ++i)
+        for (int i = 0; i < arr.length; ++i)
         {
             m_blocksPlacedByPlayer.add(BlockPos.of(arr[i]));
         }
