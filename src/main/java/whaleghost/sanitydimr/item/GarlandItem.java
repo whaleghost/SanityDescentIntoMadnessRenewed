@@ -10,20 +10,24 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-public class GarlandItem extends ArmorItem
-{
-    public GarlandItem()
-    {
+public class GarlandItem extends ArmorItem {
+
+    public GarlandItem() {
         super(ModArmorMaterials.FLOWER, ArmorItem.Type.HELMET, new Properties()
-                .durability(ArmorItem.Type.HELMET.getDurability(25))
+                .durability(ArmorItem.Type.HELMET.getDurability(10))
                 .stacksTo(1)
                 .setNoRepair());
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack pStack, @NotNull Item.TooltipContext pContext, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced)
-    {
+    public void appendHoverText(
+            @NotNull ItemStack pStack,
+            @NotNull Item.TooltipContext pContext,
+            @NotNull List<Component> pTooltipComponents,
+            @NotNull TooltipFlag pIsAdvanced
+    ) {
         super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
         ItemTooltipHelper.showTooltipOnShift(pTooltipComponents, "garland");
     }
+
 }
