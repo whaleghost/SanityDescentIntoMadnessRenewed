@@ -15,104 +15,99 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-public class TargetInsanePlayerGoal extends TargetGoal
-{
-    private final float m_sanityThreshold;
-    private boolean m_alertSameType;
+public class TargetInsanePlayerGoal extends TargetGoal {
+
+    private final float sanityThreshold;
+    private boolean alertSameType;
+
     @Nullable
     private Class<?>[] m_toIgnoreAlert;
     private Player m_insanePlayer;
 
-    public TargetInsanePlayerGoal(Mob pMob, boolean pMustSee, float sanityThreshold)
-    {
+    public TargetInsanePlayerGoal(Mob pMob, boolean pMustSee, float sanityThreshold) {
         super(pMob, pMustSee);
         setFlags(EnumSet.of(Goal.Flag.TARGET));
-        m_sanityThreshold = sanityThreshold;
+        this.sanityThreshold = sanityThreshold;
     }
 
-    public TargetInsanePlayerGoal(Mob pMob, boolean pMustSee)
-    {
+    public TargetInsanePlayerGoal(Mob pMob, boolean pMustSee) {
         this(pMob, pMustSee, -1f);
     }
 
     @Override
-    public boolean canUse()
-    {
+    public boolean canUse() {
         return (m_insanePlayer = getMostInsanePlayer()) != null;
     }
 
     @Override
-    public void start()
-    {
+    public boolean canContinueToUse() {
+        LivingEntity target = mob.getTarget();
+        if (target instanceof Player player) {
+            float sanity = player.getData(whaleghost.sanitydimr.capability.Sanity.ATTACHMENT).getSanity();
+            float threshold = sanityThreshold < 0f ? SanityProcessor.SANITY_TARGET_THRESHOLD : sanityThreshold;
+            if (sanity < threshold) {
+                return false;
+            }
+        }
+        return super.canContinueToUse();
+    }
+
+    @Override
+    public void start() {
         Player target = m_insanePlayer;
-        if (target != null)
-        {
+        if (target != null) {
             mob.setTarget(target);
             targetMob = mob.getTarget();
-            if (m_alertSameType)
-            {
+            if (alertSameType) {
                 alertOthers();
             }
         }
-
         super.start();
     }
 
-    public TargetInsanePlayerGoal setAlertOthers(Class<?>... pReinforcementTypes)
-    {
-        m_alertSameType = true;
+    public TargetInsanePlayerGoal setAlertOthers(Class<?>... pReinforcementTypes) {
+        alertSameType = true;
         m_toIgnoreAlert = pReinforcementTypes;
         return this;
     }
 
-    private Player getMostInsanePlayer()
-    {
-        return m_sanityThreshold < 0f ? SanityProcessor.getMostInsanePlayer(mob.level()) : SanityProcessor.getMostInsanePlayer(mob.level(), m_sanityThreshold);
+    private Player getMostInsanePlayer() {
+        return sanityThreshold < 0f ? SanityProcessor.getMostInsanePlayer(mob.level()) : SanityProcessor.getMostInsanePlayer(mob.level(), sanityThreshold);
     }
 
-    protected void alertOthers()
-    {
+    protected void alertOthers() {
         double d0 = this.getFollowDistance();
         AABB aabb = AABB.unitCubeFromLowerCorner(mob.position()).inflate(d0, 10.0D, d0);
         List<? extends Mob> list = mob.level().getEntitiesOfClass(mob.getClass(), aabb, EntitySelector.NO_SPECTATORS);
-        Iterator iterator = list.iterator();
-
-        while(true)
-        {
+        Iterator<? extends Mob> iterator = list.iterator();
+        while(true) {
             Mob mob;
-            while(true)
-            {
-                if (!iterator.hasNext())
-                {
+            while(true) {
+                if (!iterator.hasNext()) {
                     return;
                 }
-
-                mob = (Mob)iterator.next();
-                if (this.mob != mob && mob.getTarget() == null && (!(this.mob instanceof TamableAnimal) || ((TamableAnimal)this.mob).getOwnerUUID() == ((TamableAnimal)mob).getOwnerUUID()) && !mob.isAlliedTo(this.mob.getTarget()))
-                {
-                    if (m_toIgnoreAlert == null)
-                    {
+                mob = iterator.next();
+                if (this.mob != mob && mob.getTarget() == null &&
+                    (
+                        !(this.mob instanceof TamableAnimal) ||
+                        ((TamableAnimal)this.mob).getOwnerUUID() == ((TamableAnimal)mob).getOwnerUUID()
+                    ) && !mob.isAlliedTo(this.mob.getTarget())
+                ) {
+                    if (m_toIgnoreAlert == null) {
                         break;
                     }
-
                     boolean flag = false;
-
-                    for(Class<?> oclass : m_toIgnoreAlert)
-                    {
-                        if (mob.getClass() == oclass)
-                        {
+                    for(Class<?> oclass : m_toIgnoreAlert) {
+                        if (mob.getClass() == oclass) {
                             flag = true;
                             break;
                         }
                     }
-
-                    if (!flag)
-                    {
+                    if (!flag) {
                         break;
                     }
                 }
             }
-
             this.alertOther(mob, mob.getTarget());
         }
     }
@@ -120,4 +115,5 @@ public class TargetInsanePlayerGoal extends TargetGoal
     protected void alertOther(Mob pMob, LivingEntity pTarget) {
         pMob.setTarget(pTarget);
     }
+
 }
