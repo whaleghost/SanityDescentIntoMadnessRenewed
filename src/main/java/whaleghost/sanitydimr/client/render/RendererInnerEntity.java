@@ -5,6 +5,7 @@ import whaleghost.sanitydimr.capability.InnerEntityCapImpl;
 import whaleghost.sanitydimr.capability.Sanity;
 import whaleghost.sanitydimr.config.ConfigProxy;
 import whaleghost.sanitydimr.entity.InnerEntity;
+import whaleghost.sanitydimr.entity.InnerEntitySpawner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -17,52 +18,51 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RendererInnerEntity<T extends InnerEntity & GeoAnimatable> extends GeoEntityRenderer<T>
-{
-    private final Minecraft m_mc = Minecraft.getInstance();
-    private final AtomicBoolean m_shouldRender = new AtomicBoolean(false);
-    private final AtomicBoolean m_isTargetMe = new AtomicBoolean(false);
+public class RendererInnerEntity<T extends InnerEntity & GeoAnimatable> extends GeoEntityRenderer<T> {
 
-    public RendererInnerEntity(EntityRendererProvider.Context renderManager, GeoModel<T> model)
-    {
+    private final Minecraft mc = Minecraft.getInstance();
+    private final AtomicBoolean shouldRender = new AtomicBoolean(false);
+    private final AtomicBoolean isTargetMe = new AtomicBoolean(false);
+
+    public RendererInnerEntity(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
         super(renderManager, model);
     }
 
-    public boolean shouldRender(T entity)
-    {
-        if (m_mc.player == null || entity == null)
+    public boolean shouldRender(T entity) {
+        if (mc.player == null || entity == null) {
             return false;
-
-        if (ConfigProxy.getSaneSeeInnerEntities(m_mc.player.level().dimension().location()) || m_mc.player.isCreative() || m_mc.player.isSpectator())
+        }
+        if (
+            ConfigProxy.getSaneSeeInnerEntities(mc.player.level().dimension().location()) ||
+            mc.player.isCreative() || mc.player.isSpectator()
+        ) {
             return true;
-
+        }
         InnerEntityCapImpl iec = entity.getData(InnerEntityCapImpl.ATTACHMENT);
-        {
-            m_isTargetMe.set(iec.getPlayerTargetUUID() != null && iec.getPlayerTargetUUID().equals(m_mc.player.getUUID()));
-        }
-        if (m_isTargetMe.get())
+        isTargetMe.set(iec.getPlayerTargetUUID() != null && iec.getPlayerTargetUUID().equals(mc.player.getUUID()));
+        if (isTargetMe.get()) {
             return true;
-
-        Sanity s = m_mc.player.getData(Sanity.ATTACHMENT);
-        {
-            m_shouldRender.set(s.getSanity() >= .6f);
         }
-
-        return m_shouldRender.get();
+        Sanity s = mc.player.getData(Sanity.ATTACHMENT);
+        shouldRender.set(s.getSanity() >= InnerEntitySpawner.SPAWN_THRESHOLD);
+        return shouldRender.get();
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight)
-    {
-        if (shouldRender(entity))
+    public void render(
+            T entity, float entityYaw, float partialTick,
+            PoseStack poseStack, MultiBufferSource bufferSource, int packedLight
+    ) {
+        if (shouldRender(entity)) {
             super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+        }
     }
 
     @Override
-    public RenderType getRenderType(T animatable, ResourceLocation texture,
-                                    @Nullable MultiBufferSource bufferSource,
-                                    float partialTick)
-    {
+    public RenderType getRenderType(
+            T animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick
+    ) {
         return RenderType.entityTranslucent(getTextureLocation(animatable), false);
     }
+
 }
