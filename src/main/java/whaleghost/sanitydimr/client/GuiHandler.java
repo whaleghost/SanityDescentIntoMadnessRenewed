@@ -392,16 +392,13 @@ public class GuiHandler {
                 id = random.nextInt(LOW_SANITY_HINTS.length);
                 currentHint = LOW_SANITY_HINTS[id];
                 hintTimer = HINT_INTERVAL_LOW_SANITY;
-                if (ConfigProxy.getPlaySounds(minecraft.player.level().dimension().location()) && id == 2) {
-                    minecraft.getSoundManager().play(new SwishSoundInstance());
-                }
             } else {
                 id = random.nextInt(HIGH_SANITY_HINTS.length);
                 currentHint = HIGH_SANITY_HINTS[id];
                 hintTimer = HINT_INTERVAL_HIGH_SANITY;
-                if (ConfigProxy.getPlaySounds(minecraft.player.level().dimension().location()) && id == 0) {
-                    minecraft.getSoundManager().play(new SwishSoundInstance());
-                }
+            }
+            if (ConfigProxy.getPlaySounds(minecraft.player.level().dimension().location())) {
+                minecraft.getSoundManager().play(new SwishSoundInstance());
             }
             showingHintTimer = HINT_FLASH_DURATION;
             maxShowingHintTimer = HINT_FLASH_DURATION;

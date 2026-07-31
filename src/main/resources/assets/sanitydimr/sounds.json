@@ -2,9 +2,9 @@
 	"insanity": {
 		"category": "ambient",
 		"sounds": [
-			"sanitydimr:insanity1",
-			"sanitydimr:insanity2",
-			"sanitydimr:insanity3"
+			"sanitydimr:insanity0",
+			"sanitydimr:insanity3",
+			"sanitydimr:insanity4"
 		]
 	},
 	"heartbeat": {
@@ -17,10 +17,11 @@
 		"category": "ambient",
 		"sounds": [
 			"sanitydimr:swish0",
-			"sanitydimr:swish1",
 			"sanitydimr:swish2",
 			"sanitydimr:swish3",
-			"sanitydimr:swish4"
+			"sanitydimr:swish4",
+			"sanitydimr:swish5",
+			"sanitydimr:swish6"
 		]
 	},
 	"flowers_equip": {
