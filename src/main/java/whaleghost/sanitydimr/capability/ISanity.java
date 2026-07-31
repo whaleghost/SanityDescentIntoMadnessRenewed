@@ -1,6 +1,6 @@
 package whaleghost.sanitydimr.capability;
 
-import whaleghost.sanitydimr.ICompoundTagSerializable;
+import whaleghost.sanitydimr.util.ICompoundTagSerializable;
 
 public interface ISanity extends ICompoundTagSerializable
 {

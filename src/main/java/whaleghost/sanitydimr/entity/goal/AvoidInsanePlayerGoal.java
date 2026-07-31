@@ -9,8 +9,6 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class AvoidInsanePlayerGoal extends AvoidEntityGoal<Player>
 {
     private final TargetingConditions m_targetingConditions;
@@ -23,10 +21,8 @@ public class AvoidInsanePlayerGoal extends AvoidEntityGoal<Player>
             if (!(ent instanceof Player player) || player.isCreative() || player.isSpectator())
                 return false;
 
-            AtomicBoolean flag = new AtomicBoolean(false);
             Sanity s = player.getData(Sanity.ATTACHMENT);
-            flag.set(s.getSanity() >= Blackout.THRESHOLD);
-            return flag.get();
+            return s.getSanity() >= Blackout.THRESHOLD;
         });
     }
 

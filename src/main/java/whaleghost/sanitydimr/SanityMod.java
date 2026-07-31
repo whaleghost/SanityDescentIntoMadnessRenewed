@@ -7,17 +7,16 @@ import whaleghost.sanitydimr.capability.SanityLevelChunk;
 import whaleghost.sanitydimr.client.GuiHandler;
 import whaleghost.sanitydimr.config.ConfigManager;
 import whaleghost.sanitydimr.entity.EntityRegistry;
-import whaleghost.sanitydimr.event.EventHandler;
+import whaleghost.sanitydimr.event.BlockEventHandler;
+import whaleghost.sanitydimr.event.ClientEventHandler;
+import whaleghost.sanitydimr.event.EntityInteractionEventHandler;
 import whaleghost.sanitydimr.event.ModEventHandler;
+import whaleghost.sanitydimr.event.ServerSanityEventHandler;
 import whaleghost.sanitydimr.item.ItemRegistry;
+import whaleghost.sanitydimr.item.material.ModArmorMaterials;
 import whaleghost.sanitydimr.net.PacketHandler;
 import whaleghost.sanitydimr.sound.SoundRegistry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -26,12 +25,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
-
-import java.util.EnumMap;
-import java.util.List;
 
 @Mod(SanityMod.MODID)
 public class SanityMod
@@ -46,40 +41,30 @@ public class SanityMod
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, MODID);
 
-    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS =
-            DeferredRegister.create(Registries.ARMOR_MATERIAL, MODID);
-
-    public static final net.neoforged.neoforge.registries.DeferredHolder<ArmorMaterial, ArmorMaterial> FLOWER_ARMOR_MATERIAL =
-            ARMOR_MATERIALS.register("flower", () -> new ArmorMaterial(
-                    new EnumMap<ArmorItem.Type, Integer>(ArmorItem.Type.class) {{ put(ArmorItem.Type.HELMET, 0); }},
-                    0,
-                    SoundRegistry.FLOWERS_EQUIP,
-                    () -> Ingredient.of(ItemTags.SMALL_FLOWERS),
-                    List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MODID, "flower"))),
-                    0f,
-                    0f
-            ));
-
     public SanityMod(IEventBus modEventBus)
     {
         m_inst = this;
 
         ConfigManager.register();
 
-        modEventBus.addListener(this::setup);
-        modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ModEventHandler::addEntityAttributes);
         modEventBus.addListener(ModEventHandler::onConfigLoading);
         modEventBus.addListener(ModEventHandler::registerOverlaysEvent);
         modEventBus.addListener(ModEventHandler::registerEntityRenderersEvent);
         modEventBus.addListener(PacketHandler::register);
         ATTACHMENT_TYPES.register(modEventBus);
-        ARMOR_MATERIALS.register(modEventBus);
-        // Ensure attachment type classes are loaded so their static initializers run
-        Sanity.ATTACHMENT.getClass();
-        SanityLevelChunk.ATTACHMENT.getClass();
-        InnerEntityCapImpl.ATTACHMENT.getClass();
-        NeoForge.EVENT_BUS.register(new EventHandler());
+        Sanity.ATTACHMENT = ATTACHMENT_TYPES.register(
+                "sanity", () -> AttachmentType.serializable(Sanity::new).build());
+        SanityLevelChunk.ATTACHMENT = ATTACHMENT_TYPES.register(
+                "sanity_level_chunk", () -> AttachmentType.serializable(SanityLevelChunk::new).build());
+        InnerEntityCapImpl.ATTACHMENT = ATTACHMENT_TYPES.register(
+                "inner_entity_cap", () -> AttachmentType.builder(InnerEntityCapImpl::new).build());
+        ModArmorMaterials.REGISTRY.register(modEventBus);
+        NeoForge.EVENT_BUS.register(new ServerSanityEventHandler());
+        NeoForge.EVENT_BUS.register(new EntityInteractionEventHandler());
+        NeoForge.EVENT_BUS.register(new BlockEventHandler());
+        NeoForge.EVENT_BUS.register(new ClientEventHandler());
         EntityRegistry.register(modEventBus);
         ItemRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
@@ -90,14 +75,8 @@ public class SanityMod
         ConfigManager.init();
     }
 
-    private void setup(final FMLCommonSetupEvent event)
+    private void commonSetup(final FMLCommonSetupEvent event)
     {
-    }
-
-    private void clientSetup(final FMLClientSetupEvent event)
-    {
-        initGui();
-        //EntityRenderers.register(EntityRegistry.SHADE_CHOMPER.get(), RendererShadeChomper::new);
     }
 
     @OnlyIn(Dist.CLIENT)

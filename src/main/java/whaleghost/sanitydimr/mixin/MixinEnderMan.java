@@ -1,6 +1,6 @@
 package whaleghost.sanitydimr.mixin;
 
-import whaleghost.sanitydimr.SanityProcessor;
+import whaleghost.sanitydimr.event.SanityEventHandlers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +16,6 @@ public abstract class MixinEnderMan
     private void isLookingAtMe(Player player, CallbackInfoReturnable<Boolean> ci)
     {
         if (player instanceof ServerPlayer sp && ci.getReturnValue())
-            SanityProcessor.handlePlayerEnderManAngered(sp);
+            SanityEventHandlers.handlePlayerEnderManAngered(sp);
     }
 }

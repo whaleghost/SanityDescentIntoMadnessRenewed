@@ -1,6 +1,5 @@
 package whaleghost.sanitydimr.capability;
 
-import whaleghost.sanitydimr.SanityMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -11,9 +10,8 @@ import java.util.function.Supplier;
 
 public class SanityLevelChunk implements ISanityLevelChunk
 {
-    public static final Supplier<AttachmentType<SanityLevelChunk>> ATTACHMENT = SanityMod.ATTACHMENT_TYPES.register(
-            "sanity_level_chunk", () -> AttachmentType.serializable(SanityLevelChunk::new).build()
-    );
+    // Assigned by SanityMod during construction — deferred to avoid class-loading races
+    public static Supplier<AttachmentType<SanityLevelChunk>> ATTACHMENT;
     private final List<BlockPos> m_blocksPlacedByPlayer = new ArrayList<>();
 
     @Override
@@ -39,7 +37,7 @@ public class SanityLevelChunk implements ISanityLevelChunk
     {
         long[] arr = tag.getLongArray("sanity.blocks_placed_by_player");
         m_blocksPlacedByPlayer.clear();
-        for (int i = 0; i < arr.length / 3; ++i)
+        for (int i = 0; i < arr.length; ++i)
         {
             m_blocksPlacedByPlayer.add(BlockPos.of(arr[i]));
         }

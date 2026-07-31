@@ -14,27 +14,25 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nonnull;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class InnerEntity extends Monster
-{
-    private final AtomicBoolean m_skipAttackInteraction = new AtomicBoolean(false);
+public abstract class InnerEntity extends Monster {
 
-    protected InnerEntity(EntityType<? extends Monster> entityType, Level level)
-    {
+    private final AtomicBoolean skipAttackInteraction = new AtomicBoolean(false);
+
+    protected InnerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
     @Override
-    public boolean skipAttackInteraction(Entity entity)
-    {
-        if (entity instanceof Player player && !ConfigProxy.getSaneSeeInnerEntities(player.level().dimension().location()) &&
-                !(player.isCreative() || player.isSpectator()) && getTarget() != player)
-        {
+    public boolean skipAttackInteraction(Entity entity) {
+        if (
+            entity instanceof Player player &&
+            !ConfigProxy.getSaneSeeInnerEntities(player.level().dimension().location()) &&
+            !(player.isCreative() || player.isSpectator()) && getTarget() != player
+        ) {
             Sanity s = player.getData(Sanity.ATTACHMENT);
-            m_skipAttackInteraction.set(s.getSanity() < .6f);
-
-            return m_skipAttackInteraction.get();
+            skipAttackInteraction.set(s.getSanity() < InnerEntitySpawner.SPAWN_THRESHOLD);
+            return skipAttackInteraction.get();
         }
-
         return super.skipAttackInteraction(entity);
     }
 
@@ -45,14 +43,13 @@ public abstract class InnerEntity extends Monster
     }
 
     @Override
-    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource)
-    {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return SoundRegistry.INNER_ENTITY_HURT.get();
     }
 
     @Override
-    protected SoundEvent getDeathSound()
-    {
+    protected SoundEvent getDeathSound() {
         return SoundRegistry.INNER_ENTITY_HURT.get();
     }
+
 }

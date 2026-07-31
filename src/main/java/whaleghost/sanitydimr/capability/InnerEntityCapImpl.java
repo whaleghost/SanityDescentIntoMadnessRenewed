@@ -1,6 +1,5 @@
 package whaleghost.sanitydimr.capability;
 
-import whaleghost.sanitydimr.SanityMod;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.neoforge.attachment.AttachmentType;
 
@@ -9,9 +8,8 @@ import java.util.function.Supplier;
 
 public class InnerEntityCapImpl implements IInnerEntityCap
 {
-    public static final Supplier<AttachmentType<InnerEntityCapImpl>> ATTACHMENT = SanityMod.ATTACHMENT_TYPES.register(
-            "inner_entity_cap", () -> AttachmentType.builder(InnerEntityCapImpl::new).build()
-    );
+    // Assigned by SanityMod during construction — deferred to avoid class-loading races
+    public static Supplier<AttachmentType<InnerEntityCapImpl>> ATTACHMENT;
     private boolean m_dirty;
     private boolean m_hasTarget;
     private UUID m_playerUuid;
